@@ -1365,6 +1365,7 @@
         .loader.hidden {
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
         }
 
         .loader-cat {
@@ -2120,11 +2121,16 @@
                 <p><em>Продолжение следует…</em></p>`;
 
         // ===== LOADER =====
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 1500);
-        });
+        function hideLoader() {
+            const loader = document.getElementById('loader');
+            if (loader) loader.classList.add('hidden');
+        }
+
+        // Hide after content loads
+        window.addEventListener('load', () => setTimeout(hideLoader, 1000));
+
+        // Fallback: hide after 3 seconds anyway
+        setTimeout(hideLoader, 3000);
 
         // ===== COSMIC CANVAS =====
         const canvas = document.getElementById('cosmicCanvas');
