@@ -663,6 +663,40 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
         }
 
+        .character-portrait {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 1.5rem;
+            border: 3px solid var(--glass-border);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 165, 0, 0.15);
+            transition: all 0.4s ease;
+        }
+
+        .character-portrait img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .character-card:hover .character-portrait {
+            border-color: var(--twilight-primary);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(156, 107, 219, 0.3);
+        }
+
+        .character-card:hover .character-portrait img {
+            transform: scale(1.1);
+        }
+
+        .character-card.murka:hover .character-portrait { border-color: var(--twilight-primary); }
+        .character-card.ryzhik:hover .character-portrait { border-color: var(--ice-primary); }
+        .character-card.golden:hover .character-portrait { border-color: var(--sun-gold); }
+        .character-card.birds:hover .character-portrait { border-color: var(--metal-shine); }
+        .character-card.baton:hover .character-portrait { border-color: var(--fire-secondary); }
+        .character-card.golysh:hover .character-portrait { border-color: #a3a3a3; }
+
         .character-symbol {
             width: 80px;
             height: 80px;
@@ -1127,6 +1161,25 @@
             font-weight: 700;
         }
 
+        .chapter-image {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .chapter-image img {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 165, 0, 0.2);
+            border: 2px solid var(--glass-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chapter-image img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6), 0 0 50px rgba(255, 165, 0, 0.3);
+        }
+
         .chapter-text {
             font-size: 1.1rem;
             line-height: 2;
@@ -1545,7 +1598,9 @@
         <div class="characters-grid">
             <!-- Murka -->
             <div class="character-card murka">
-                <div class="character-symbol">🐱</div>
+                <div class="character-portrait">
+                    <img src="images/char_murka.png" alt="Мурка" loading="lazy">
+                </div>
                 <h3 class="character-name">Мурка</h3>
                 <p class="character-role">Оценщица красоты III разряда</p>
                 <p class="character-description">
@@ -1560,7 +1615,9 @@
 
             <!-- Ryzhik -->
             <div class="character-card ryzhik">
-                <div class="character-symbol">✨</div>
+                <div class="character-portrait">
+                    <img src="images/char_ryzhik.png" alt="Рыжик" loading="lazy">
+                </div>
                 <h3 class="character-name">Рыжик</h3>
                 <p class="character-role">Бродяга из Мерзлоты</p>
                 <p class="character-description">
@@ -1575,7 +1632,9 @@
 
             <!-- Golden -->
             <div class="character-card golden">
-                <div class="character-symbol">🐉</div>
+                <div class="character-portrait">
+                    <img src="images/char_zolotoy.png" alt="Золотой" loading="lazy">
+                </div>
                 <h3 class="character-name">Золотой</h3>
                 <p class="character-role">Белый дракон на Солнце</p>
                 <p class="character-description">
@@ -1590,7 +1649,9 @@
 
             <!-- Birds -->
             <div class="character-card birds">
-                <div class="character-symbol">🦅</div>
+                <div class="character-portrait">
+                    <img src="images/char_birds.png" alt="Флот Клюва" loading="lazy">
+                </div>
                 <h3 class="character-name">Флот Клюва</h3>
                 <p class="character-role">Технократическая Империя</p>
                 <p class="character-description">
@@ -1605,7 +1666,9 @@
 
             <!-- Baton -->
             <div class="character-card baton">
-                <div class="character-symbol">🔪</div>
+                <div class="character-portrait">
+                    <img src="images/char_baton.png" alt="Батон" loading="lazy">
+                </div>
                 <h3 class="character-name">Батон</h3>
                 <p class="character-role">Глава картеля «Мятные Усы»</p>
                 <p class="character-description">
@@ -1620,7 +1683,9 @@
 
             <!-- Father Golysh -->
             <div class="character-card golysh">
-                <div class="character-symbol">🙏</div>
+                <div class="character-portrait">
+                    <img src="images/char_golysh.png" alt="Отец Голыш" loading="lazy">
+                </div>
                 <h3 class="character-name">Отец Голыш</h3>
                 <p class="character-role">Верховный жрец сфинксов</p>
                 <p class="character-description">
@@ -1916,6 +1981,9 @@
                     <p class="chapter-number">ПРОЛОГ</p>
                     <h3 class="chapter-title">Мир, каким его знают</h3>
                 </div>
+                <div class="chapter-image" id="chapterImage">
+                    <img src="images/ch00_prologue.png" alt="Иллюстрация к главе" id="chapterImg">
+                </div>
                 <div class="chapter-text" id="chapterText">
                     <!-- Content loaded by JS -->
                 </div>
@@ -2169,6 +2237,14 @@
             }
         }
 
+        // Chapter image mapping
+        const chapterImages = [
+            'ch00_prologue', 'ch01_another_day', 'ch02_voice', 'ch03_meeting',
+            'ch04_dream', 'ch05_sphynx', 'ch06_revelation', 'ch07_ritual',
+            'ch08_baton', 'ch09_stars_fade', 'ch10_broadcast', 'ch11_battle',
+            'ch12_after', 'ch13_epilogue'
+        ];
+
         function displayChapter(index) {
             if (!chapters[index]) return;
 
@@ -2176,6 +2252,13 @@
             chapterContent.querySelector('.chapter-number').textContent = chapter.number;
             chapterContent.querySelector('.chapter-title').textContent = chapter.title;
             chapterText.innerHTML = chapter.content;
+
+            // Update chapter image
+            const chapterImg = document.getElementById('chapterImg');
+            if (chapterImg && chapterImages[index]) {
+                chapterImg.src = 'images/' + chapterImages[index] + '.png';
+                chapterImg.alt = chapter.title;
+            }
 
             // Update buttons
             document.querySelectorAll('.chapter-btn').forEach((btn, i) => {
