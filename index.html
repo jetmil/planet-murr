@@ -824,6 +824,149 @@
             color: var(--twilight-gold);
         }
 
+        /* Murr Scale Table */
+        .murr-scale-section {
+            max-width: 1200px;
+            margin: 4rem auto 0;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            overflow: hidden;
+        }
+
+        .murr-scale-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .murr-scale-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--twilight-gold), var(--fire-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .murr-scale-subtitle {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .murr-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+        }
+
+        .murr-table th {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.85rem;
+            color: var(--twilight-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .murr-table td {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            font-size: 0.95rem;
+        }
+
+        .murr-table tr td:first-child {
+            border-radius: 12px 0 0 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+        }
+
+        .murr-table tr td:last-child {
+            border-radius: 0 12px 12px 0;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .murr-table .score-elite td:first-child { color: var(--sun-gold); }
+        .murr-table .score-good td:first-child { color: #4ade80; }
+        .murr-table .score-mid td:first-child { color: var(--twilight-primary); }
+        .murr-table .score-low td:first-child { color: var(--fire-primary); }
+        .murr-table .score-ugly td:first-child { color: #dc2626; }
+
+        /* Proverbs & Swearing */
+        .culture-section {
+            max-width: 1200px;
+            margin: 4rem auto 0;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+        }
+
+        .culture-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .culture-card h4 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .culture-card.proverbs h4 { color: var(--twilight-gold); }
+        .culture-card.swearing h4 { color: var(--fire-primary); }
+
+        .proverb-item, .swear-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .proverb-item:last-child, .swear-item:last-child {
+            border-bottom: none;
+        }
+
+        .proverb-mark {
+            color: var(--twilight-gold);
+            font-size: 1.2rem;
+        }
+
+        .swear-mark {
+            color: var(--fire-primary);
+            font-size: 1rem;
+        }
+
+        .proverb-text {
+            font-style: italic;
+            color: var(--text-light);
+        }
+
+        .swear-text {
+            color: var(--text-light);
+        }
+
+        .swear-meaning {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Extra characters */
+        .character-card.baton .character-quote { border-color: var(--fire-secondary); }
+        .character-card.golysh .character-quote { border-color: #a3a3a3; }
+        .character-card.pushinka .character-quote { border-color: var(--twilight-gold); }
+        .character-card.zhirdyai .character-quote { border-color: #4ade80; }
+
         /* ===== CONFLICT SECTION ===== */
         .conflict-section {
             padding: 8rem 2rem;
@@ -1463,6 +1606,66 @@
                     «Драконы творят. Мы можем только потреблять. Поэтому они должны умереть.»
                 </div>
             </div>
+
+            <!-- Baton -->
+            <div class="character-card baton">
+                <div class="character-symbol">🔪</div>
+                <h3 class="character-name">Батон</h3>
+                <p class="character-role">Глава картеля «Мятные Усы»</p>
+                <p class="character-description">
+                    Старый одноглазый кот. Никто не видел его 30 лет — некоторые считают, что он уже труп.
+                    Выглядит как то, что вытащили из помойки. Философ с ножом.
+                    Говорит загадками. Убивает без эмоций. Скучает — ему нужно что-то интересное.
+                </p>
+                <div class="character-quote">
+                    «Знаешь чем хороша валерьянка? Она честная. Принял — хорошо. Отпустило — плохо. Никакой политики.»
+                </div>
+            </div>
+
+            <!-- Father Golysh -->
+            <div class="character-card golysh">
+                <div class="character-symbol">🙏</div>
+                <h3 class="character-name">Отец Голыш</h3>
+                <p class="character-role">Верховный жрец сфинксов</p>
+                <p class="character-description">
+                    Древний сфинкс, 15 лет — глубокий старик. Единственный, кто знает полную правду о мире.
+                    Молчит, потому что 800 лет назад за правду сожгли храмы.
+                    Ест только огурцы. Ждёт того, кто услышит.
+                </p>
+                <div class="character-quote">
+                    «Огурец содержит 95% воды и 100% истины.»
+                </div>
+            </div>
+
+            <!-- Marquise de Pushinka -->
+            <div class="character-card pushinka">
+                <div class="character-symbol">👑</div>
+                <h3 class="character-name">Маркиза де Пушинка</h3>
+                <p class="character-role">Министр Эстетики</p>
+                <p class="character-description">
+                    Сиамская кошка с безупречным экстерьером — высший балл по шкале Мурра, естественный, не купленный.
+                    Холодная, расчётливая, красивая. Ненавидит уродов искренне.
+                    Верит, что красота — это моральное качество.
+                </p>
+                <div class="character-quote">
+                    «Уродство — это выбор. Каждый может быть красивым. Некоторые просто не стараются.»
+                </div>
+            </div>
+
+            <!-- Zhirdyai -->
+            <div class="character-card zhirdyai">
+                <div class="character-symbol">💰</div>
+                <h3 class="character-name">Жирдяй</h3>
+                <p class="character-role">Глава корпорации «Зелёные Ростки»</p>
+                <p class="character-description">
+                    Огромный рыжий кот. Балл 3 по шкале — низший средний. Начинал грузчиком на плантациях.
+                    Через 40 лет — владелец 80% овсяного рынка. Методы: тёмные. Связи: везде.
+                    Конкуренты: мертвы или разорены.
+                </p>
+                <div class="character-quote">
+                    «Деньги не купят красоту. Но они купят всё остальное. Включая тех, кто решает, что красиво.»
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1521,6 +1724,141 @@
                     <strong>Но.</strong> Они единственные помнят, что планета — шар. Что есть звезда.
                     Это ересь, за неё сажают.
                 </p>
+            </div>
+        </div>
+
+        <!-- Murr Scale Table -->
+        <div class="murr-scale-section">
+            <div class="murr-scale-header">
+                <h3 class="murr-scale-title">🏆 Полная Шкала Мурра</h3>
+                <p class="murr-scale-subtitle">Instagram/TikTok доведённый до абсурда. Лайки = права кота.</p>
+            </div>
+            <table class="murr-table">
+                <thead>
+                    <tr>
+                        <th>Балл</th>
+                        <th>Статус</th>
+                        <th>Что получаешь</th>
+                        <th>На практике</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="score-elite">
+                        <td>60-70</td>
+                        <td>Эстет</td>
+                        <td>Государство содержит как национальное достояние. Не работаешь, бесплатный овёс, лучшие районы.</td>
+                        <td>Таких единицы. Половина — с купленными баллами.</td>
+                    </tr>
+                    <tr class="score-good">
+                        <td>45-59</td>
+                        <td>Красавчик</td>
+                        <td>Престижная работа, ипотека на нормальных условиях, приглашения на вечеринки.</td>
+                        <td>Живут неплохо. Стараются не сильно отсвечивать.</td>
+                    </tr>
+                    <tr class="score-mid">
+                        <td>30-44</td>
+                        <td>Норма</td>
+                        <td>Обычная жизнь. Работай, плати налоги, не высовывайся.</td>
+                        <td>90% населения. Мечтают о пятёрке.</td>
+                    </tr>
+                    <tr class="score-low">
+                        <td>15-29</td>
+                        <td>Серость</td>
+                        <td>Плохие районы у края Полосы. Работа на плантациях или в Пекле. Кредиты под грабительский процент.</td>
+                        <td>Хороший кандидат на взятку — если есть чем платить.</td>
+                    </tr>
+                    <tr class="score-ugly">
+                        <td>0-14</td>
+                        <td>Уродец</td>
+                        <td>Официальный термин. Принудительная стерилизация. Ссылка в Пекло навечно.</td>
+                        <td>Или беги к Батону, или сдохни красиво.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Culture: Proverbs & Swearing -->
+        <div class="culture-section">
+            <div class="culture-card proverbs">
+                <h4>📜 Поговорки мира Мурр</h4>
+                <div class="proverb-item">
+                    <span class="proverb-mark">«</span>
+                    <span class="proverb-text">В Пекле два сезона — жарко и пиздец.</span>
+                </div>
+                <div class="proverb-item">
+                    <span class="proverb-mark">«</span>
+                    <span class="proverb-text">В Мерзлоте не холодно, в Мерзлоте — характер.</span>
+                </div>
+                <div class="proverb-item">
+                    <span class="proverb-mark">«</span>
+                    <span class="proverb-text">В Полосе хорошо, потому что везде плохо.</span>
+                </div>
+                <div class="proverb-item">
+                    <span class="proverb-mark">«</span>
+                    <span class="proverb-text">Светись — и тебя увидят. Не светишься — сам виноват.</span>
+                </div>
+                <div class="proverb-item">
+                    <span class="proverb-mark">«</span>
+                    <span class="proverb-text">Не всё то золото, что блестит. Иногда это просто высокий рейтинг.</span>
+                </div>
+                <div class="proverb-item">
+                    <span class="proverb-mark">«</span>
+                    <span class="proverb-text">Сфинкс огурцу рад.</span>
+                </div>
+                <div class="proverb-item">
+                    <span class="proverb-mark">«</span>
+                    <span class="proverb-text">Шерсть отрастёт, а репутация — нет.</span>
+                </div>
+                <div class="proverb-item">
+                    <span class="proverb-mark">«</span>
+                    <span class="proverb-text">Рейтинг рейтингом, а мыши по расписанию.</span>
+                </div>
+            </div>
+
+            <div class="culture-card swearing">
+                <h4>🔥 Ругательства</h4>
+                <div class="swear-item">
+                    <span class="swear-mark">💢</span>
+                    <div>
+                        <span class="swear-text">«Ощипанный петух!»</span>
+                        <p class="swear-meaning">Грубейшее оскорбление. Намёк на птиц — врагов.</p>
+                    </div>
+                </div>
+                <div class="swear-item">
+                    <span class="swear-mark">💢</span>
+                    <div>
+                        <span class="swear-text">«Лысый ты!»</span>
+                        <p class="swear-meaning">Оскорбление красоты. Равнозначно «урод».</p>
+                    </div>
+                </div>
+                <div class="swear-item">
+                    <span class="swear-mark">💢</span>
+                    <div>
+                        <span class="swear-text">«Чтоб тебе в Пекло!»</span>
+                        <p class="swear-meaning">Проклятие. Пожелание ссылки и смерти.</p>
+                    </div>
+                </div>
+                <div class="swear-item">
+                    <span class="swear-mark">💢</span>
+                    <div>
+                        <span class="swear-text">«Безрейтинговый!»</span>
+                        <p class="swear-meaning">Социальное унижение. Ты — никто.</p>
+                    </div>
+                </div>
+                <div class="swear-item">
+                    <span class="swear-mark">💢</span>
+                    <div>
+                        <span class="swear-text">«Огуречник!»</span>
+                        <p class="swear-meaning">Мягкое. Намёк на сфинксов, странных и бедных.</p>
+                    </div>
+                </div>
+                <div class="swear-item">
+                    <span class="swear-mark">💢</span>
+                    <div>
+                        <span class="swear-text">«Шаровик!»</span>
+                        <p class="swear-meaning">Еретик, верящий что мир круглый. Сажают.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
