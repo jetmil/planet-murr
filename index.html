@@ -1399,11 +1399,6 @@
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loader" id="loader">
-        <div class="loader-cat">🐱</div>
-        <div class="loader-text">ЗАГРУЗКА МУРРА...</div>
-    </div>
 
     <!-- Cosmic Canvas Background -->
     <canvas id="cosmicCanvas"></canvas>
@@ -2120,17 +2115,6 @@
                 <p><em>Если только три души — разделённые звёздами и воплощениями — не найдут способ снова стать одним целым.</em></p>
                 <p><em>Продолжение следует…</em></p>`;
 
-        // ===== LOADER =====
-        function hideLoader() {
-            const loader = document.getElementById('loader');
-            if (loader) loader.classList.add('hidden');
-        }
-
-        // Hide after content loads
-        window.addEventListener('load', () => setTimeout(hideLoader, 1000));
-
-        // Fallback: hide after 3 seconds anyway
-        setTimeout(hideLoader, 3000);
 
         // ===== COSMIC CANVAS =====
         const canvas = document.getElementById('cosmicCanvas');
