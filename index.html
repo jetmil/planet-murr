@@ -1,0 +1,2076 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Планета Мурр — Космическая сага о котах, драконах и судьбе</title>
+    <meta name="description" content="Эпическая история о планете котов между стеной огня и стеной льда, о драконах на солнце и птицах, несущих смерть">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Exo+2:wght@300;400;600&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Пекло — огненная сторона */
+            --fire-primary: #ff6b35;
+            --fire-secondary: #c1440e;
+            --fire-glow: #ff9500;
+            --fire-dark: #2d1810;
+
+            /* Мерзлота — ледяная сторона */
+            --ice-primary: #00d4ff;
+            --ice-secondary: #4fc3f7;
+            --ice-glow: #e0f7ff;
+            --ice-dark: #0a1628;
+
+            /* Полоса — сумерки */
+            --twilight-primary: #9c6bdb;
+            --twilight-secondary: #6b4c9a;
+            --twilight-gold: #d4af37;
+            --twilight-dark: #1a1425;
+
+            /* Солнце — драконы */
+            --sun-gold: #ffd700;
+            --sun-white: #fff8e7;
+            --sun-plasma: #ffaa00;
+
+            /* Птицы — механика */
+            --metal-gray: #4a5568;
+            --metal-shine: #718096;
+            --metal-dark: #1a202c;
+
+            /* Базовые */
+            --bg-deep: #0a0a0f;
+            --text-light: #e8e6e3;
+            --text-muted: #9ca3af;
+
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: var(--bg-deep);
+            color: var(--text-light);
+            line-height: 1.8;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ===== CANVAS BACKGROUNDS ===== */
+        #cosmicCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ===== SCROLL PROGRESS ===== */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--fire-primary), var(--twilight-primary), var(--ice-primary));
+            z-index: 1000;
+            transition: width 0.1s linear;
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 100;
+            transform: translateY(-100%);
+            transition: transform 0.4s ease;
+        }
+
+        nav.visible {
+            transform: translateY(0);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--fire-primary), var(--twilight-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--fire-primary), var(--ice-primary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-light);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(193, 68, 14, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 30%, rgba(156, 107, 219, 0.2) 0%, transparent 40%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero-subtitle {
+            font-family: 'Exo 2', sans-serif;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: var(--text-muted);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.3s forwards;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(
+                135deg,
+                var(--fire-primary) 0%,
+                var(--sun-gold) 25%,
+                var(--twilight-primary) 50%,
+                var(--ice-primary) 75%,
+                var(--ice-glow) 100%
+            );
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 8s ease infinite, fadeInUp 1s ease-out 0.5s forwards;
+            opacity: 0;
+            text-shadow: 0 0 80px rgba(212, 175, 55, 0.3);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-planet {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: var(--twilight-gold);
+            letter-spacing: 0.5em;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.7s forwards;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.9s forwards;
+        }
+
+        .hero-zones {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.1s forwards;
+        }
+
+        .zone-badge {
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: 1px solid;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .zone-badge.fire {
+            background: rgba(193, 68, 14, 0.2);
+            border-color: var(--fire-primary);
+            color: var(--fire-primary);
+        }
+
+        .zone-badge.twilight {
+            background: rgba(156, 107, 219, 0.2);
+            border-color: var(--twilight-primary);
+            color: var(--twilight-primary);
+        }
+
+        .zone-badge.ice {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--ice-primary);
+            color: var(--ice-primary);
+        }
+
+        .zone-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--twilight-secondary), var(--twilight-primary));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.3s forwards;
+            text-decoration: none;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(156, 107, 219, 0.4);
+        }
+
+        .hero-cta svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-cta:hover svg {
+            transform: translateX(5px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== SCROLL INDICATOR ===== */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.5s forwards, bounce 2s ease-in-out infinite 2s;
+        }
+
+        .scroll-indicator span {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .scroll-indicator .mouse {
+            width: 24px;
+            height: 40px;
+            border: 2px solid var(--text-muted);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .scroll-indicator .wheel {
+            width: 4px;
+            height: 8px;
+            background: var(--twilight-primary);
+            border-radius: 2px;
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollWheel 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollWheel {
+            0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 0.3; transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* ===== WORLD SECTION ===== */
+        .world-section {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: var(--twilight-gold);
+            letter-spacing: 0.3em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== ZONES GRID ===== */
+        .zones-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .zone-card {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .zone-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .zone-card.fire-zone::before {
+            background: linear-gradient(180deg,
+                rgba(193, 68, 14, 0.1) 0%,
+                rgba(45, 24, 16, 0.95) 60%,
+                var(--fire-dark) 100%
+            );
+        }
+
+        .zone-card.twilight-zone::before {
+            background: linear-gradient(180deg,
+                rgba(156, 107, 219, 0.1) 0%,
+                rgba(26, 20, 37, 0.95) 60%,
+                var(--twilight-dark) 100%
+            );
+        }
+
+        .zone-card.ice-zone::before {
+            background: linear-gradient(180deg,
+                rgba(0, 212, 255, 0.1) 0%,
+                rgba(10, 22, 40, 0.95) 60%,
+                var(--ice-dark) 100%
+            );
+        }
+
+        .zone-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px solid transparent;
+            border-radius: 24px;
+            transition: border-color 0.3s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .zone-card.fire-zone::after { border-color: rgba(255, 107, 53, 0.3); }
+        .zone-card.twilight-zone::after { border-color: rgba(156, 107, 219, 0.3); }
+        .zone-card.ice-zone::after { border-color: rgba(0, 212, 255, 0.3); }
+
+        .zone-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .zone-card:hover::after {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .zone-visual {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .zone-visual canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .zone-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .zone-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .fire-zone .zone-icon {
+            background: linear-gradient(135deg, var(--fire-primary), var(--fire-secondary));
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .twilight-zone .zone-icon {
+            background: linear-gradient(135deg, var(--twilight-primary), var(--twilight-secondary));
+            box-shadow: 0 10px 30px rgba(156, 107, 219, 0.3);
+        }
+
+        .ice-zone .zone-icon {
+            background: linear-gradient(135deg, var(--ice-primary), var(--ice-secondary));
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .zone-name {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .zone-aka {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .zone-description {
+            font-size: 1rem;
+            color: var(--text-light);
+            opacity: 0.9;
+            line-height: 1.7;
+        }
+
+        .zone-inhabitants {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .inhabitant-label {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .inhabitant-type {
+            font-weight: 600;
+        }
+
+        .fire-zone .inhabitant-type { color: var(--fire-primary); }
+        .twilight-zone .inhabitant-type { color: var(--twilight-gold); }
+        .ice-zone .inhabitant-type { color: var(--ice-primary); }
+
+        /* ===== CHARACTERS SECTION ===== */
+        .characters-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(26, 20, 37, 0.5) 50%, transparent 100%);
+        }
+
+        .characters-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .character-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .character-card:hover::before {
+            left: 100%;
+        }
+
+        .character-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .character-symbol {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .character-symbol::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            border: 2px solid;
+            opacity: 0.3;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.1; }
+        }
+
+        .character-card.murka .character-symbol {
+            background: linear-gradient(135deg, var(--twilight-secondary), var(--twilight-primary));
+        }
+        .character-card.murka .character-symbol::after { border-color: var(--twilight-primary); }
+
+        .character-card.ryzhik .character-symbol {
+            background: linear-gradient(135deg, var(--ice-secondary), var(--ice-primary));
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+        .character-card.ryzhik .character-symbol::after { border-color: var(--ice-primary); }
+
+        .character-card.golden .character-symbol {
+            background: linear-gradient(135deg, var(--sun-plasma), var(--sun-gold));
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+        }
+        .character-card.golden .character-symbol::after { border-color: var(--sun-gold); }
+
+        .character-card.birds .character-symbol {
+            background: linear-gradient(135deg, var(--metal-gray), var(--metal-shine));
+        }
+        .character-card.birds .character-symbol::after { border-color: var(--metal-gray); }
+
+        .character-name {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .character-role {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .character-card.murka .character-role { color: var(--twilight-primary); }
+        .character-card.ryzhik .character-role { color: var(--ice-primary); }
+        .character-card.golden .character-role { color: var(--sun-gold); }
+        .character-card.birds .character-role { color: var(--metal-shine); }
+
+        .character-description {
+            color: var(--text-light);
+            font-size: 1rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .character-quote {
+            margin-top: 1.5rem;
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        .character-card.murka .character-quote { border-color: var(--twilight-primary); }
+        .character-card.ryzhik .character-quote { border-color: var(--ice-primary); }
+        .character-card.golden .character-quote { border-color: var(--sun-gold); }
+        .character-card.birds .character-quote { border-color: var(--metal-gray); }
+
+        /* ===== SOCIETY SECTION ===== */
+        .society-section {
+            padding: 8rem 2rem;
+        }
+
+        .society-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+        }
+
+        .society-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .society-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .society-card.beauty::before { background: linear-gradient(180deg, var(--twilight-gold), var(--twilight-primary)); }
+        .society-card.oats::before { background: linear-gradient(180deg, #4ade80, #16a34a); }
+        .society-card.valerian::before { background: linear-gradient(180deg, var(--fire-primary), #dc2626); }
+        .society-card.religion::before { background: linear-gradient(180deg, #f5f5f5, #a3a3a3); }
+
+        .society-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .society-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .society-subtitle {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .society-text {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .society-text strong {
+            color: var(--twilight-gold);
+        }
+
+        /* ===== CONFLICT SECTION ===== */
+        .conflict-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg,
+                transparent 0%,
+                rgba(193, 68, 14, 0.1) 30%,
+                rgba(193, 68, 14, 0.15) 50%,
+                rgba(193, 68, 14, 0.1) 70%,
+                transparent 100%
+            );
+            position: relative;
+        }
+
+        .conflict-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .conflict-countdown {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(193, 68, 14, 0.2);
+            border: 1px solid var(--fire-primary);
+            border-radius: 50px;
+            padding: 0.8rem 2rem;
+            margin-bottom: 3rem;
+            animation: dangerPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes dangerPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(193, 68, 14, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(193, 68, 14, 0.6); }
+        }
+
+        .countdown-icon {
+            font-size: 1.5rem;
+        }
+
+        .countdown-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--fire-primary);
+            letter-spacing: 0.1em;
+        }
+
+        .conflict-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--fire-primary), var(--sun-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .conflict-text {
+            font-size: 1.2rem;
+            line-height: 2;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+        }
+
+        .conflict-stakes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stake-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            border: 1px solid rgba(193, 68, 14, 0.2);
+        }
+
+        .stake-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .stake-text {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== READER SECTION ===== */
+        .reader-section {
+            padding: 4rem 2rem 8rem;
+            background: linear-gradient(180deg, transparent, rgba(26, 20, 37, 0.3));
+        }
+
+        .reader-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .chapter-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .chapter-btn {
+            padding: 0.6rem 1.2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chapter-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        .chapter-btn.active {
+            background: var(--twilight-primary);
+            border-color: var(--twilight-primary);
+            color: white;
+        }
+
+        .chapter-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .chapter-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: var(--twilight-gold);
+            letter-spacing: 0.3em;
+            margin-bottom: 0.5rem;
+        }
+
+        .chapter-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .chapter-text {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: var(--text-light);
+        }
+
+        .chapter-text p {
+            margin-bottom: 1.5rem;
+            text-indent: 2rem;
+        }
+
+        .chapter-text p:first-child {
+            text-indent: 0;
+        }
+
+        .chapter-text p:first-child::first-letter {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 4rem;
+            float: left;
+            line-height: 0.8;
+            margin-right: 0.5rem;
+            color: var(--twilight-gold);
+        }
+
+        .chapter-text em {
+            color: var(--twilight-primary);
+        }
+
+        .chapter-text strong {
+            color: var(--sun-gold);
+        }
+
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--glass-bg);
+            border-color: var(--twilight-primary);
+            color: var(--text-light);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--fire-primary), var(--ice-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--twilight-primary);
+        }
+
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--twilight-secondary), var(--twilight-primary));
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(156, 107, 219, 0.4);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .zones-container {
+                grid-template-columns: 1fr;
+            }
+
+            .zone-card {
+                min-height: 400px;
+            }
+
+            .society-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .conflict-stakes {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 15, 0.95);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                border-bottom: 1px solid var(--glass-border);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero {
+                padding: 1rem;
+            }
+
+            .hero-zones {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .chapter-content {
+                padding: 1.5rem;
+            }
+
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== FLOATING ELEMENTS ===== */
+        .floating-cat {
+            position: fixed;
+            font-size: 2rem;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .floating-cat:nth-child(1) { top: 20%; left: 5%; animation-delay: 0s; }
+        .floating-cat:nth-child(2) { top: 60%; right: 8%; animation-delay: -5s; }
+        .floating-cat:nth-child(3) { bottom: 30%; left: 10%; animation-delay: -10s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(20px) rotate(-5deg); }
+        }
+
+        /* ===== LOADING ANIMATION ===== */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-deep);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-cat {
+            font-size: 4rem;
+            animation: loaderBounce 1s ease-in-out infinite;
+        }
+
+        .loader-text {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--twilight-gold);
+            margin-top: 1rem;
+            letter-spacing: 0.2em;
+        }
+
+        @keyframes loaderBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* ===== SPECIAL EFFECTS ===== */
+        .glow-text {
+            text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-cat">🐱</div>
+        <div class="loader-text">ЗАГРУЗКА МУРРА...</div>
+    </div>
+
+    <!-- Cosmic Canvas Background -->
+    <canvas id="cosmicCanvas"></canvas>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Floating Elements -->
+    <div class="floating-cat">🐱</div>
+    <div class="floating-cat">😺</div>
+    <div class="floating-cat">🐈</div>
+
+    <!-- Navigation -->
+    <nav id="mainNav">
+        <div class="nav-content">
+            <div class="nav-logo">МУРР</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#world">Мир</a></li>
+                <li><a href="#characters">Герои</a></li>
+                <li><a href="#society">Общество</a></li>
+                <li><a href="#conflict">Угроза</a></li>
+                <li><a href="#read">Читать</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <p class="hero-subtitle">Космическая сага</p>
+            <h1 class="hero-title">ПЛАНЕТА</h1>
+            <p class="hero-planet">М У Р Р</p>
+            <p class="hero-tagline">
+                Между стеной огня и стеной льда, в вечных сумерках,
+                решается судьба тех, кто не знает, что у них есть солнце
+            </p>
+            <div class="hero-zones">
+                <span class="zone-badge fire">🔥 Пекло</span>
+                <span class="zone-badge twilight">🌆 Полоса</span>
+                <span class="zone-badge ice">❄️ Мерзлота</span>
+            </div>
+            <a href="#read" class="hero-cta">
+                Начать путешествие
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+        <div class="scroll-indicator">
+            <span>Листайте</span>
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- World Section -->
+    <section class="world-section" id="world">
+        <div class="section-header">
+            <p class="section-number">✦ ГЛАВА I ✦</p>
+            <h2 class="section-title">Три мира одной планеты</h2>
+            <p class="section-subtitle">
+                Спутник газового гиганта. Приливный захват — одной стороной всегда к звезде.
+            </p>
+        </div>
+
+        <div class="zones-container">
+            <!-- Fire Zone -->
+            <div class="zone-card fire-zone">
+                <div class="zone-visual">
+                    <canvas id="fireZoneCanvas"></canvas>
+                </div>
+                <div class="zone-content">
+                    <div class="zone-icon">🔥</div>
+                    <h3 class="zone-name">Пекло</h3>
+                    <p class="zone-aka">Солнечная сторона</p>
+                    <p class="zone-description">
+                        Выжженная пустыня. Расплавленные породы, редкие металлы, адская работа.
+                        Сюда ссылают преступников и едут добровольцы за длинным рублём.
+                        Возвращаются богатыми или не возвращаются.
+                    </p>
+                    <div class="zone-inhabitants">
+                        <span class="inhabitant-label">Обитатели:</span>
+                        <span class="inhabitant-type">Огненные коты</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Twilight Zone -->
+            <div class="zone-card twilight-zone">
+                <div class="zone-visual">
+                    <canvas id="twilightZoneCanvas"></canvas>
+                </div>
+                <div class="zone-content">
+                    <div class="zone-icon">🌆</div>
+                    <h3 class="zone-name">Полоса</h3>
+                    <p class="zone-aka">Терминатор</p>
+                    <p class="zone-description">
+                        Узкая зона вечных сумерек между адом и антарктидой. Здесь живёт большинство.
+                        Города тянутся вдоль границы света и тьмы.
+                        Плоскоземельщики правы — мир выглядит как лента между двумя стенами.
+                    </p>
+                    <div class="zone-inhabitants">
+                        <span class="inhabitant-label">Население:</span>
+                        <span class="inhabitant-type">Обычные коты</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ice Zone -->
+            <div class="zone-card ice-zone">
+                <div class="zone-visual">
+                    <canvas id="iceZoneCanvas"></canvas>
+                </div>
+                <div class="zone-content">
+                    <div class="zone-icon">❄️</div>
+                    <h3 class="zone-name">Мерзлота</h3>
+                    <p class="zone-aka">Ночная сторона</p>
+                    <p class="zone-description">
+                        Вечный лёд, вечная тьма. Подлёдные озёра с ледяными рыбами.
+                        Здесь живут те, чей мех светится в темноте.
+                        Считаются мистиками и чудаками. Лучшие шаманы — отсюда.
+                    </p>
+                    <div class="zone-inhabitants">
+                        <span class="inhabitant-label">Обитатели:</span>
+                        <span class="inhabitant-type">Световые коты</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Characters Section -->
+    <section class="characters-section" id="characters">
+        <div class="section-header">
+            <p class="section-number">✦ ГЛАВА II ✦</p>
+            <h2 class="section-title">Те, от кого зависит всё</h2>
+            <p class="section-subtitle">
+                Одна душа в трёх воплощениях. Или две — растянутые между солнцем и планетой.
+            </p>
+        </div>
+
+        <div class="characters-grid">
+            <!-- Murka -->
+            <div class="character-card murka">
+                <div class="character-symbol">🐱</div>
+                <h3 class="character-name">Мурка</h3>
+                <p class="character-role">Оценщица красоты III разряда</p>
+                <p class="character-description">
+                    Каждый день смотрит на котов, выставляет баллы, решает судьбы.
+                    Сама — твёрдая четвёрка. Достаточно для Полосы, недостаточно чтобы не работать.
+                    Ненавидит систему, но молчит — ипотека.
+                </p>
+                <div class="character-quote">
+                    «Я глотаю снотворное каждую ночь, потому что мои сны слишком страшные.»
+                </div>
+            </div>
+
+            <!-- Ryzhik -->
+            <div class="character-card ryzhik">
+                <div class="character-symbol">✨</div>
+                <h3 class="character-name">Рыжик</h3>
+                <p class="character-role">Бродяга из Мерзлоты</p>
+                <p class="character-description">
+                    Световой кот со слабо светящимся мехом — значит слабый шаман.
+                    Пришёл в Полосу нелегально. Несёт чушь про голоса с неба,
+                    про огненного змея во снах, про дверь вместо стены.
+                </p>
+                <div class="character-quote">
+                    «Стена огня — это не стена. Это дверь. Он зовёт меня каждую ночь.»
+                </div>
+            </div>
+
+            <!-- Golden -->
+            <div class="character-card golden">
+                <div class="character-symbol">🐉</div>
+                <h3 class="character-name">Золотой</h3>
+                <p class="character-role">Белый дракон на Солнце</p>
+                <p class="character-description">
+                    Молодой по меркам драконов — всего сто тысяч лет.
+                    Состоит из плазмы и мысли. Его работа — эманировать сны для ночной стороны Мурра.
+                    Уже несколько сотен лет он посылает одной душе одно и то же: себя.
+                </p>
+                <div class="character-quote">
+                    «Я жду её миллион лет. Она захотела узнать, каково быть смертной. И ушла.»
+                </div>
+            </div>
+
+            <!-- Birds -->
+            <div class="character-card birds">
+                <div class="character-symbol">🦅</div>
+                <h3 class="character-name">Флот Клюва</h3>
+                <p class="character-role">Технократическая Империя</p>
+                <p class="character-description">
+                    Птицы строят Сферы Дайсона вокруг чужих солнц. Для драконов — это медленная смерть в клетке.
+                    Зависть, возведённая в идеологию.
+                    Когда звезда будет закрыта сферой — вся планета замёрзнет.
+                </p>
+                <div class="character-quote">
+                    «Драконы творят. Мы можем только потреблять. Поэтому они должны умереть.»
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Society Section -->
+    <section class="society-section" id="society">
+        <div class="section-header">
+            <p class="section-number">✦ ГЛАВА III ✦</p>
+            <h2 class="section-title">Устройство мира</h2>
+            <p class="section-subtitle">
+                Экономика красоты, овсяные войны и лысые еретики
+            </p>
+        </div>
+
+        <div class="society-grid">
+            <div class="society-card beauty">
+                <div class="society-icon">👑</div>
+                <h3 class="society-title">Шкала Мурра</h3>
+                <p class="society-subtitle">Экономика красоты</p>
+                <p class="society-text">
+                    Каждый кот оценивается: густота шерсти, симметрия морды, грация походки, вибрация мурчания.
+                    <strong>Высший балл</strong> — живёшь как национальное достояние.
+                    <strong>Низкий балл</strong> — добро пожаловать в Пекло.
+                    На практике балл можно купить. Богатые уродцы ходят красавцами.
+                </p>
+            </div>
+
+            <div class="society-card oats">
+                <div class="society-icon">🌾</div>
+                <h3 class="society-title">Овёс</h3>
+                <p class="society-subtitle">Нефть этого мира</p>
+                <p class="society-text">
+                    Растёт только в Полосе. Корпорация <strong>«Зелёные Ростки»</strong> контролирует 80% рынка.
+                    Поставляют в Мерзлоту (там не растёт ничего) и в Пекло (там всё сгорает).
+                    Кто контролирует овёс — контролирует планету.
+                </p>
+            </div>
+
+            <div class="society-card valerian">
+                <div class="society-icon">🌿</div>
+                <h3 class="society-title">Валерьянка</h3>
+                <p class="society-subtitle">Запрещённый наркотик</p>
+                <p class="society-text">
+                    Растёт дико в предгорьях Ледяной Стены. Контрабандисты бегают через Мерзлоту с сушёным корнем.
+                    Картель <strong>«Мятные Усы»</strong> держит рынок. Глава — старый одноглазый кот по кличке <strong>Батон</strong>.
+                    Живёт где-то в Мерзлоте, никто не знает где.
+                </p>
+            </div>
+
+            <div class="society-card religion">
+                <div class="society-icon">🙏</div>
+                <h3 class="society-title">Церковь Голого Тела</h3>
+                <p class="society-subtitle">Сфинксы</p>
+                <p class="society-text">
+                    Лысые, морщинистые, страшные. Их доктрина: шерсть — тщеславие, плоть — оковы.
+                    Едят только огурцы. Мем: «Сфинкс огурцу рад».
+                    <strong>Но.</strong> Они единственные помнят, что планета — шар. Что есть звезда.
+                    Это ересь, за неё сажают.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conflict Section -->
+    <section class="conflict-section" id="conflict">
+        <div class="conflict-content">
+            <div class="conflict-countdown">
+                <span class="countdown-icon">⚠️</span>
+                <span class="countdown-text">ДО ПРИБЫТИЯ ФЛОТА: 30 ДНЕЙ</span>
+            </div>
+
+            <h2 class="conflict-title">Птицы идут</h2>
+
+            <p class="conflict-text">
+                Месяц до прибытия флота. Коты не знают — они даже не знают, что у них есть солнце.
+                Думают, что это стена. Драконы не могут предупредить — как достучаться до тех, кто не слышит?
+                Сфинксы знают правду, но их никто не слушает.
+                <br><br>
+                <strong>Рыжик</strong> слышит голоса, но его считают психом.
+                <br>
+                <strong>Мурка</strong> — единственная, кто может соединить куски.
+                Но она глотает снотворное каждую ночь.
+                <br>
+                <strong>Золотой</strong> начнёт умирать, когда птицы начнут строить сферу.
+            </p>
+
+            <div class="conflict-stakes">
+                <div class="stake-item">
+                    <div class="stake-icon">🐱</div>
+                    <p class="stake-text">Коты думают, что живут между двух стен</p>
+                </div>
+                <div class="stake-item">
+                    <div class="stake-icon">🐉</div>
+                    <p class="stake-text">Драконы задохнутся в клетке из металла</p>
+                </div>
+                <div class="stake-item">
+                    <div class="stake-icon">🌍</div>
+                    <p class="stake-text">Планета замёрзнет, когда закроют звезду</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reader Section -->
+    <section class="reader-section" id="read">
+        <div class="reader-container">
+            <div class="section-header">
+                <p class="section-number">✦ ЧИТАТЬ ✦</p>
+                <h2 class="section-title">История начинается</h2>
+            </div>
+
+            <div class="chapter-nav" id="chapterNav">
+                <button class="chapter-btn active" data-chapter="0">Пролог</button>
+                <button class="chapter-btn" data-chapter="1">Глава 1</button>
+                <button class="chapter-btn" data-chapter="2">Глава 2</button>
+                <button class="chapter-btn" data-chapter="3">Глава 3</button>
+                <button class="chapter-btn" data-chapter="4">Глава 4</button>
+                <button class="chapter-btn" data-chapter="5">Глава 5</button>
+            </div>
+
+            <div class="chapter-content" id="chapterContent">
+                <div class="chapter-header">
+                    <p class="chapter-number">ПРОЛОГ</p>
+                    <h3 class="chapter-title">Мир, каким его знают</h3>
+                </div>
+                <div class="chapter-text" id="chapterText">
+                    <!-- Content loaded by JS -->
+                </div>
+                <div class="chapter-navigation">
+                    <button class="nav-btn" id="prevChapter" disabled>
+                        ← Назад
+                    </button>
+                    <button class="nav-btn" id="nextChapter">
+                        Далее →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">ПЛАНЕТА МУРР</div>
+        <p class="footer-text">Космическая сага о котах, драконах и судьбе между звёздами</p>
+        <div class="footer-links">
+            <a href="https://ligardi.ru" target="_blank">ligardi.ru</a>
+            <a href="#hero">В начало</a>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">↑</button>
+
+    <script>
+        // ===== BOOK DATA =====
+        const chapters = [
+            {
+                number: "ПРОЛОГ",
+                title: "Мир, каким его знают",
+                content: `<p>Мир — это лента. Узкая полоса сносной жизни между двумя стенами: стеной огня на востоке и стеной льда на западе. Так учат в школах. Так написано в учебниках. Так было всегда и так будет вечно.</p>
+                <p>Города тянутся вдоль этой ленты — бесконечной цепью огней в вечных сумерках. Здесь никогда не бывает полного дня и полной ночи. Здесь небо всегда одного цвета — цвета старого серебра, тронутого ржавчиной на востоке и синевой на западе.</p>
+                <p><em>Полоса.</em> Терминатор. Граница. Единственное место, где можно жить.</p>
+                <p>К востоку — <strong>Пекло</strong>. Туда уходят те, кто хочет разбогатеть или должен искупить вину. Там добывают редкие металлы из расплавленных пород. Там живут огненные коты — жилистые, облезлые, с обугленными ушами и глазами цвета раскалённой меди. Они возвращаются богатыми или не возвращаются вовсе.</p>
+                <p>К западу — <strong>Мерзлота</strong>. Вечный лёд, вечная тьма. Там живут те, чей мех светится в темноте, — <em>световые коты</em>. Они разводят ледяных рыб в подлёдных озёрах и видят то, чего не видят другие. Говорят, лучшие шаманы родом оттуда. Говорят, они знают что-то важное. Но кто слушает шаманов?</p>
+                <p>А посередине — мы. Обычные коты обычного мира. Мы ходим на работу, платим за квартиры, покупаем пророщенный овёс в магазинах корпорации «Зелёные Ростки». Мы проходим ежегодную оценку по <strong>Шкале Мурра</strong> и надеемся, что наш балл не упадёт ниже допустимого.</p>
+                <p>Мы смотрим на стену огня и думаем: там — конец мира.</p>
+                <p>Мы смотрим на стену льда и думаем: и там тоже.</p>
+                <p>Мы не знаем, что стена огня — это звезда. <em>Наша</em> звезда. Мы не знаем, что на ней живут драконы — существа из плазмы и мысли, которые плавают в солнечной короне и видят наши сны.</p>
+                <p>Мы не знаем, что к нам летит флот. Что через месяц наше небо закроет металлическая сфера. Что всё, что мы знали о мире, было ложью.</p>
+                <p>Но скоро узнаем.</p>
+                <p>История начинается с кошки по имени Мурка, которая работает оценщицей красоты в районном отделении Министерства Эстетики. С бродяги по имени Рыжик, который пришёл из Мерзлоты с безумными речами о голосах с неба. И с дракона по имени Золотой, который ждёт кого-то уже миллион лет.</p>
+                <p><strong>Их пути пересекутся.</strong></p>
+                <p><em>И мир уже никогда не будет прежним.</em></p>`
+            },
+            {
+                number: "ГЛАВА 1",
+                title: "Оценщица",
+                content: `<p>Мурка проснулась за три минуты до будильника. Как всегда. Тело знало расписание лучше любых часов — двенадцать лет на одной работе приучают к точности.</p>
+                <p>Она лежала в темноте, глядя в потолок. Снотворное ещё гудело в крови — тяжёлое, химическое, надёжное. Никаких снов. Никаких голосов. Никаких странных образов, от которых просыпаешься в холодном поту.</p>
+                <p><em>Так лучше,</em> — сказала она себе. <em>Так правильно.</em></p>
+                <p>Квартира была маленькой, но в хорошем районе — пятый сектор Полосы, всего в двух кварталах от центральной магистрали. Ипотека съедала половину зарплаты, но альтернатива была хуже. В дешёвых районах жили те, чей балл по Шкале опустился ниже пяти. Жить рядом с ними — всё равно что признать себя такой же.</p>
+                <p>Мурка встала, включила свет, посмотрела в зеркало.</p>
+                <p><strong>Твёрдая четвёрка.</strong></p>
+                <p>Не красавица, но и не уродина. Шерсть — обычная, серая с рыжими подпалинами. Морда — симметричная, но без изюминки. Походка — функциональная. Мурчание — стандартное, 440 герц.</p>
+                <p>Достаточно, чтобы жить в Полосе. Недостаточно, чтобы не работать.</p>
+                <p>Она оделась, выпила чашку овсяного молока (продукция «Зелёных Ростков», разумеется — других на рынке не было), проверила документы. Планшет с сегодняшними делами. Список котов на оценку. Бланки. Печати.</p>
+                <p><em>Двадцать три дела,</em> — прочитала она. <em>Одна первичная оценка, четыре пересмотра, восемнадцать плановых проверок.</em></p>
+                <p>Первичные были самыми тяжёлыми. Молодые коты, только вышедшие из возраста котят, приходили узнать свой первый балл. Некоторые выходили с улыбкой — семёрки, восьмёрки, счастливчики. Некоторые выходили с белыми мордами.</p>
+                <p>Двойка означала Пекло. Единица — Мерзлоту.</p>
+                <p>Мурка ненавидела первичные оценки. Но ещё больше она ненавидела пересмотры — когда кто-то богатый приходил с чеком и намёком, что его балл «может быть, стоит пересмотреть».</p>
+                <p>За двенадцать лет она научилась не замечать чеки. Научилась смотреть сквозь намёки. Научилась быть честной.</p>
+                <p><em>Почти,</em> — поправила она себя. <em>Почти честной.</em></p>
+                <p>Потому что иногда — очень редко — она ставила лишний балл тем, кто действительно в этом нуждался. Котёнку из бедной семьи. Старухе, которой грозила депортация. Кому-то, в чьих глазах она видела себя.</p>
+                <p>Это было против правил. Это было опасно. Но иногда правила были неправильными.</p>
+                <p>Она вышла из дома и направилась к станции монорельса. Небо было своего обычного цвета — серебро с ржавчиной на востоке. Где-то там, за горизонтом, горела стена огня. Где-то там коты добывали металлы из расплавленных пород.</p>
+                <p>Где-то там был мир, о котором она ничего не знала.</p>
+                <p><em>Но скоро узнает.</em></p>`
+            },
+            {
+                number: "ГЛАВА 2",
+                title: "Бродяга",
+                content: `<p>Он пришёл в середине дня, когда Мурка уже обработала семнадцать дел и мечтала только об обеденном перерыве.</p>
+                <p>Первое, что она заметила — <em>свечение</em>.</p>
+                <p>Слабое, едва различимое, но несомненное. Его рыжий мех мерцал в полутьме кабинета, словно под кожей горели крошечные звёзды. Световой кот. Нелегал из Мерзлоты.</p>
+                <p>— Имя? — спросила она, не поднимая глаз от планшета.</p>
+                <p>— Рыжик.</p>
+                <p>Голос был странным. Не грубым, не мягким — <em>отстранённым</em>. Словно он говорил из очень далёкого места.</p>
+                <p>— Документы?</p>
+                <p>— Нет.</p>
+                <p>Она наконец подняла глаза. Он стоял у двери — высокий, худой, с глазами цвета подлёдного озера. На нём была дешёвая одежда, явно не по размеру. Шерсть — спутанная, но чистая. И это свечение, это мерцание…</p>
+                <p><em>Слабый шаман,</em> — автоматически отметила она. <em>Сильные светятся ярче. Этот — почти обычный. Почти.</em></p>
+                <p>— Без документов я не могу вас оценить, — сказала она официальным тоном. — Вам нужно сначала обратиться в миграционную службу…</p>
+                <p>— Я знаю вас.</p>
+                <p>Она замерла.</p>
+                <p>— Что?</p>
+                <p>— Я видел вас. Во снах. Каждую ночь, много лет. — Он сделал шаг ближе. Его свечение стало чуть ярче. — Вы стоите на краю огня. Он зовёт вас. Но вы не слышите.</p>
+                <p>Мурка почувствовала, как по спине бежит холодок. Это было безумие. Бред сумасшедшего бродяги из Мерзлоты. Но…</p>
+                <p><em>Но почему его слова отдаются эхом где-то глубоко внутри?</em></p>
+                <p>— Вам нужна медицинская помощь, — сказала она, стараясь, чтобы голос не дрожал. — Я вызову…</p>
+                <p>— Стена огня — это не стена.</p>
+                <p>Он смотрел на неё своими озёрными глазами, и в них не было безумия. Была уверенность. Абсолютная, нечеловеческая уверенность.</p>
+                <p>— Это дверь. И за ней — тот, кто вас ждёт. Он ждёт уже очень долго. Миллион лет.</p>
+                <p>Мурка хотела засмеяться. Хотела позвать охрану. Хотела сделать хоть что-то разумное.</p>
+                <p>Вместо этого она спросила:</p>
+                <p>— <em>Кто?</em></p>
+                <p>И в этот момент — впервые за много лет — она почувствовала что-то. Не мысль. Не воспоминание. Что-то глубже. Что-то древнее.</p>
+                <p>Образ золотого змея, плывущего в море огня.</p>
+                <p>Ощущение крыльев за спиной.</p>
+                <p>И голос — далёкий, тёплый, бесконечно знакомый — шепчущий её настоящее имя.</p>
+                <p>Имя, которое она забыла миллион лет назад.</p>`
+            },
+            {
+                number: "ГЛАВА 3",
+                title: "Дракон",
+                content: `<p>В сердце звезды, где температура исчисляется миллионами градусов, а материя существует в состоянии, которое невозможно описать словами смертных, — <strong>Золотой</strong> раскрыл крылья.</p>
+                <p>Крылья из чистого света. Тело из плазмы и намерения. Разум, распределённый по магнитным линиям на миллионы километров.</p>
+                <p>Он был молод по меркам своего народа — всего сто тысяч лет. Подросток. Несерьёзный возраст для существа, которому предстоит жить вечность.</p>
+                <p>Но даже подростку иногда снятся сны.</p>
+                <p><em>Она была здесь когда-то.</em></p>
+                <p>Память обжигала ярче, чем ядро звезды. Они плавали вместе в коронах молодых светил. Они танцевали в протуберанцах, переплетая свои мысли и энергии. Они были… чем-то. Не парой в смысле смертных созданий. Чем-то большим. Чем-то, для чего не существовало слов.</p>
+                <p>А потом она захотела <em>узнать</em>.</p>
+                <p>— Каково это, — спросила она тогда, — быть маленьким? Плотным? Конечным?</p>
+                <p>— Зачем тебе это? — не понял он. — У нас есть всё. Мы есть всё.</p>
+                <p>— Именно поэтому. Мы не знаем, что значит терять. Не знаем, что значит бояться. Не знаем, что значит… заканчиваться.</p>
+                <p>Она ушла.</p>
+                <p>Погрузилась в материю. Разделилась на части. Начала долгое путешествие через воплощения — камень, растение, животное, разумное существо. Она забыла, кем была. Это было условие игры.</p>
+                <p>А он остался ждать.</p>
+                <p>Сто тысяч лет — для дракона это много и мало одновременно. Достаточно, чтобы научиться терпению. Недостаточно, чтобы перестать скучать.</p>
+                <p>Каждую ночь он посылал ей сны. Через восемь световых минут, через вакуум пространства, через барьер между звездой и планетой — он тянулся к ней своими мыслями. Показывал ей море огня. Показывал себя. Звал.</p>
+                <p><em>Но она не слышала.</em></p>
+                <p>Последняя сотня лет была особенно мучительной. Он чувствовал её — там, на маленьком спутнике газового гиганта. Чувствовал, как она просыпается за три минуты до будильника. Чувствовал, как она глотает снотворное, чтобы не видеть снов. Чувствовал, как она каждый день смотрит на «стену огня» и не понимает, что смотрит на него.</p>
+                <p>А теперь он чувствовал кое-что ещё.</p>
+                <p><em>Они идут.</em></p>
+                <p>Флот Клюва. Металлические корабли, несущие смерть. Сфера Дайсона в трюмах — разобранная, готовая к сборке. Через месяц они начнут строительство. Через год — закончат. Через два — он задохнётся в клетке из металла, а она замёрзнет на планете, лишённой света.</p>
+                <p>И тогда он сделал то, чего не делал никогда.</p>
+                <p>Он <em>закричал</em>.</p>
+                <p>Не голосом — драконы не кричат голосом. Он закричал всем своим существом. Выплеснул себя в пространство. Стал протуберанцем, стал солнечной бурей, стал волной энергии, несущейся к планете.</p>
+                <p>Восемь минут спустя на Мурре взвыли все сейсмографы.</p>
+                <p>Восемь минут спустя в Министерстве Эстетики оценщица по имени Мурка схватилась за голову и услышала голос.</p>
+                <p>Восемь минут спустя бродяга по имени Рыжик улыбнулся и прошептал:</p>
+                <p>— <em>Наконец-то.</em></p>`
+            },
+            {
+                number: "ГЛАВА 4",
+                title: "Пробуждение",
+                content: `<p>Мурка не помнила, как оказалась на полу.</p>
+                <p>Она помнила голос — тёплый, огромный, заполнивший её целиком. Помнила образы: море золотого огня, существо из света и намерения, протянувшее к ней крылья через бездну космоса.</p>
+                <p>И она помнила <em>имя</em>.</p>
+                <p>Не «Мурка». Что-то другое. Что-то, что нельзя произнести кошачьим горлом, но можно почувствовать всем телом.</p>
+                <p>— Вы меня слышали.</p>
+                <p>Рыжик сидел рядом, его свечение стало ярче — теперь он был похож на фонарь в темноте. Глаза его сияли.</p>
+                <p>— Что… что это было?</p>
+                <p>— Он. Тот, кто ждёт за стеной огня. Он больше не может ждать молча.</p>
+                <p>Мурка села, прижав лапы к вискам. Голова раскалывалась. Но сквозь боль пробивалось что-то ещё — странное чувство узнавания. Словно она вспомнила сон, который снился ей каждую ночь, но который она забывала при пробуждении.</p>
+                <p>— Это безумие, — прошептала она. — Я схожу с ума.</p>
+                <p>— Нет. Вы просыпаетесь.</p>
+                <p>За окном кабинета творилось что-то странное. Небо — обычно серебристо-ржавое — полыхало оранжевым. Сирены выли по всему городу. По улицам бежали коты, задирая головы к небу.</p>
+                <p>— Солнечная буря, — сказал Рыжик. — Самая сильная за тысячу лет. Он кричит. Он пытается достучаться.</p>
+                <p>— До кого?</p>
+                <p>— До вас. До всех. Но особенно — до вас.</p>
+                <p>Мурка встала на дрожащих лапах. Подошла к окну. Стена огня на востоке больше не была стеной — она была <em>живой</em>. Языки пламени вырывались из-за горизонта, танцуя в небе, складываясь в узоры, которые казались… осмысленными.</p>
+                <p>— Плоскоземельщики, — прошептала она. — Мы всю жизнь думали, что мир — это лента между двумя стенами. Что стена огня — это конец. А это…</p>
+                <p>— Это начало, — закончил Рыжик. — И это наш дом.</p>
+                <p>Он встал рядом с ней. Его свечение отражалось в стекле, смешиваясь с оранжевым заревом неба.</p>
+                <p>— Я шаман, — сказал он. — Слабый, как считают в Мерзлоте. Но даже слабые шаманы знают правду, которую другие забыли. Мир — шар. Стена огня — звезда. На звезде живут драконы. И один из них любит вас так сильно, что кричит на всю систему.</p>
+                <p>Мурка хотела возразить. Хотела сказать, что это бред, что так не бывает, что она просто оценщица красоты третьего разряда с ипотекой и проблемами со сном.</p>
+                <p>Но вместо этого она заплакала.</p>
+                <p>Потому что где-то глубоко внутри — там, где жила её настоящая память, — она знала, что всё это правда.</p>
+                <p>— Что мне делать? — спросила она сквозь слёзы.</p>
+                <p>— Перестать убегать, — ответил Рыжик. — Перестать прятаться в снотворном. И начать вспоминать, кто вы на самом деле.</p>
+                <p>Небо полыхало. Сирены выли. Где-то за миллионы километров дракон по имени Золотой чувствовал, как впервые за сто лет она <em>слышит</em> его.</p>
+                <p>А на границе системы флот Клюва продолжал приближаться.</p>`
+            },
+            {
+                number: "ГЛАВА 5",
+                title: "Враг",
+                content: `<p>Адмирал Клёст смотрел на звезду через тактический экран флагмана «Железное Перо».</p>
+                <p>Обычная звезда. Жёлтый карлик средних размеров. Ничего особенного по меркам галактики. Но Клёст знал — <em>внутри</em> живут они.</p>
+                <p><strong>Драконы.</strong></p>
+                <p>Он ненавидел их с тех пор, как научился ненавидеть. С тех пор, как в военной академии им показали записи — существа из чистого света, скользящие сквозь солнечную корону, творящие реальность одной лишь мыслью.</p>
+                <p>Птицы летали. Это было их гордостью, их идентичностью. Но птицам нужны были корабли, скафандры, технологии. Драконы летали <em>по-настоящему</em> — в вакууме, в плазме, в местах, где любой корабль испарился бы за наносекунду.</p>
+                <p>Птицы строили. Это было их величие. Но они строили из того, что находили. Драконы <em>творили</em> — из ничего, из мысли, из намерения.</p>
+                <p>Это было несправедливо. Это было оскорблением самого существования Империи Клюва.</p>
+                <p>И поэтому драконы должны были умереть.</p>
+                <p>— Адмирал, — раздался голос навигатора, — мы фиксируем аномальную солнечную активность. Протуберанцы класса Х.</p>
+                <p>— Они знают, что мы идём?</p>
+                <p>— Возможно. Но это не имеет значения. Сфера будет построена по графику.</p>
+                <p>Клёст кивнул. Сфера Дайсона — величайшее достижение птичьей инженерии. Конструкция, полностью окружающая звезду и собирающая всю её энергию. Для драконов — тюрьма и смертный приговор. Для Империи — неисчерпаемый источник силы.</p>
+                <p>За три тысячи лет они построили шестнадцать таких сфер. Шестнадцать звёзд, лишённых своих драконов. Шестнадцать систем, опустевших после того, как их планеты замёрзли.</p>
+                <p>Эта будет семнадцатой.</p>
+                <p>— На планете есть разумная жизнь, — напомнил помощник. — Кошачьи. Индустриальная цивилизация.</p>
+                <p>— И?</p>
+                <p>— Протоколы Империи требуют…</p>
+                <p>— Протоколы требуют сообщить об этом в Сенат. Что я и сделаю. После того, как сфера будет построена. — Клёст развернулся к помощнику. Его глаза были холодными, как космический вакуум. — Вы ведь понимаете, что произойдёт, если мы дадим им время?</p>
+                <p>Помощник молчал.</p>
+                <p>— Они начнут задавать вопросы. Поднимут панику. Возможно, попытаются связаться с драконами. А драконы… — Клёст сплюнул, — драконы могут что-нибудь придумать. Они всегда что-нибудь придумывают. Поэтому — никаких предупреждений. Никаких переговоров. Мы прибываем, мы строим, мы уходим. А то, что останется от их мира… это уже не наша забота.</p>
+                <p>Флот продолжал движение. Пятьдесят кораблей, несущих в трюмах разобранную сферу. Десять тысяч рабочих. Пять тысяч солдат.</p>
+                <p>Через двадцать восемь дней они начнут строительство.</p>
+                <p>Через год — закончат.</p>
+                <p>И тогда на планете Мурр наступит вечная зима.</p>
+                <p>А дракон по имени Золотой будет медленно умирать в клетке из металла, глядя на своё солнце сквозь решётку.</p>
+                <p><em>Если только кто-нибудь не остановит их.</em></p>
+                <p><em>Если только три души — разделённые звёздами и воплощениями — не найдут способ снова стать одним целым.</em></p>
+                <p><em>Продолжение следует…</em></p>`
+            }
+        ];
+
+        let currentChapter = 0;
+
+        // ===== LOADER =====
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1500);
+        });
+
+        // ===== COSMIC CANVAS =====
+        const canvas = document.getElementById('cosmicCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Stars
+        const stars = [];
+        for (let i = 0; i < 200; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5,
+                opacity: Math.random(),
+                twinkleSpeed: 0.01 + Math.random() * 0.02,
+                twinkleDirection: 1
+            });
+        }
+
+        // Nebula particles
+        const nebulae = [];
+        for (let i = 0; i < 5; i++) {
+            nebulae.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: 100 + Math.random() * 200,
+                color: ['rgba(156, 107, 219, 0.03)', 'rgba(255, 107, 53, 0.02)', 'rgba(0, 212, 255, 0.02)'][Math.floor(Math.random() * 3)],
+                vx: (Math.random() - 0.5) * 0.2,
+                vy: (Math.random() - 0.5) * 0.2
+            });
+        }
+
+        function animateCosmos() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw nebulae
+            nebulae.forEach(n => {
+                const gradient = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.radius);
+                gradient.addColorStop(0, n.color);
+                gradient.addColorStop(1, 'transparent');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                n.x += n.vx;
+                n.y += n.vy;
+
+                if (n.x < -n.radius) n.x = canvas.width + n.radius;
+                if (n.x > canvas.width + n.radius) n.x = -n.radius;
+                if (n.y < -n.radius) n.y = canvas.height + n.radius;
+                if (n.y > canvas.height + n.radius) n.y = -n.radius;
+            });
+
+            // Draw stars
+            stars.forEach(star => {
+                star.opacity += star.twinkleSpeed * star.twinkleDirection;
+                if (star.opacity >= 1 || star.opacity <= 0.2) {
+                    star.twinkleDirection *= -1;
+                }
+
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                ctx.fill();
+            });
+
+            requestAnimationFrame(animateCosmos);
+        }
+
+        animateCosmos();
+
+        // ===== ZONE CANVASES =====
+        function initZoneCanvas(canvasId, type) {
+            const zoneCanvas = document.getElementById(canvasId);
+            if (!zoneCanvas) return;
+
+            const zoneCtx = zoneCanvas.getContext('2d');
+
+            function resizeZoneCanvas() {
+                const rect = zoneCanvas.parentElement.getBoundingClientRect();
+                zoneCanvas.width = rect.width;
+                zoneCanvas.height = rect.height;
+            }
+
+            resizeZoneCanvas();
+
+            const particles = [];
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * zoneCanvas.width,
+                    y: Math.random() * zoneCanvas.height,
+                    radius: Math.random() * 3 + 1,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: type === 'fire' ? -Math.random() * 2 - 0.5 : (Math.random() - 0.5) * 0.5,
+                    opacity: Math.random(),
+                    life: Math.random()
+                });
+            }
+
+            function getColor(opacity) {
+                switch (type) {
+                    case 'fire':
+                        return `rgba(255, ${Math.floor(100 + Math.random() * 50)}, ${Math.floor(Math.random() * 50)}, ${opacity})`;
+                    case 'ice':
+                        return `rgba(${Math.floor(200 + Math.random() * 55)}, ${Math.floor(230 + Math.random() * 25)}, 255, ${opacity})`;
+                    case 'twilight':
+                        return `rgba(${Math.floor(150 + Math.random() * 50)}, ${Math.floor(100 + Math.random() * 50)}, ${Math.floor(200 + Math.random() * 55)}, ${opacity})`;
+                    default:
+                        return `rgba(255, 255, 255, ${opacity})`;
+                }
+            }
+
+            function animateZone() {
+                zoneCtx.clearRect(0, 0, zoneCanvas.width, zoneCanvas.height);
+
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.life -= 0.005;
+
+                    if (p.life <= 0 || p.y < 0 || p.y > zoneCanvas.height || p.x < 0 || p.x > zoneCanvas.width) {
+                        p.x = Math.random() * zoneCanvas.width;
+                        p.y = type === 'fire' ? zoneCanvas.height : Math.random() * zoneCanvas.height;
+                        p.life = 1;
+                    }
+
+                    const gradient = zoneCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 2);
+                    gradient.addColorStop(0, getColor(p.life * 0.8));
+                    gradient.addColorStop(1, 'transparent');
+
+                    zoneCtx.beginPath();
+                    zoneCtx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2);
+                    zoneCtx.fillStyle = gradient;
+                    zoneCtx.fill();
+                });
+
+                requestAnimationFrame(animateZone);
+            }
+
+            animateZone();
+            window.addEventListener('resize', resizeZoneCanvas);
+        }
+
+        // Initialize zone canvases after DOM load
+        setTimeout(() => {
+            initZoneCanvas('fireZoneCanvas', 'fire');
+            initZoneCanvas('twilightZoneCanvas', 'twilight');
+            initZoneCanvas('iceZoneCanvas', 'ice');
+        }, 100);
+
+        // ===== SCROLL EFFECTS =====
+        const nav = document.getElementById('mainNav');
+        const scrollProgress = document.getElementById('scrollProgress');
+        const backToTop = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollY / docHeight) * 100;
+
+            scrollProgress.style.width = `${progress}%`;
+
+            if (scrollY > 100) {
+                nav.classList.add('visible');
+                backToTop.classList.add('visible');
+            } else {
+                nav.classList.remove('visible');
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ===== MOBILE MENU =====
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // ===== CHAPTER READER =====
+        const chapterNav = document.getElementById('chapterNav');
+        const chapterContent = document.getElementById('chapterContent');
+        const chapterText = document.getElementById('chapterText');
+        const prevBtn = document.getElementById('prevChapter');
+        const nextBtn = document.getElementById('nextChapter');
+
+        function loadChapter(index) {
+            const chapter = chapters[index];
+            chapterContent.querySelector('.chapter-number').textContent = chapter.number;
+            chapterContent.querySelector('.chapter-title').textContent = chapter.title;
+            chapterText.innerHTML = chapter.content;
+
+            // Update buttons
+            document.querySelectorAll('.chapter-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
+
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === chapters.length - 1;
+
+            currentChapter = index;
+
+            // Scroll to reader
+            chapterContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        chapterNav.addEventListener('click', (e) => {
+            if (e.target.classList.contains('chapter-btn')) {
+                loadChapter(parseInt(e.target.dataset.chapter));
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentChapter > 0) {
+                loadChapter(currentChapter - 1);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentChapter < chapters.length - 1) {
+                loadChapter(currentChapter + 1);
+            }
+        });
+
+        // Initial load
+        loadChapter(0);
+
+        // ===== SMOOTH SCROLL FOR NAV LINKS =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // ===== INTERSECTION OBSERVER FOR ANIMATIONS =====
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.zone-card, .character-card, .society-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
