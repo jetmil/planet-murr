@@ -2256,8 +2256,12 @@
             // Update chapter image
             const chapterImg = document.getElementById('chapterImg');
             if (chapterImg && chapterImages[index]) {
-                chapterImg.src = './images/' + chapterImages[index] + '.png';
+                const newSrc = './images/' + chapterImages[index] + '.png?v=' + Date.now();
+                console.log('Setting image for chapter', index, ':', newSrc);
+                chapterImg.src = newSrc;
                 chapterImg.alt = chapter.title;
+            } else {
+                console.warn('Cannot set image - img:', !!chapterImg, 'imgData:', chapterImages[index]);
             }
 
             // Update buttons
