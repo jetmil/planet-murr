@@ -1574,12 +1574,7 @@
             </div>
 
             <div class="chapter-nav" id="chapterNav">
-                <button class="chapter-btn active" data-chapter="0">Пролог</button>
-                <button class="chapter-btn" data-chapter="1">Глава 1</button>
-                <button class="chapter-btn" data-chapter="2">Глава 2</button>
-                <button class="chapter-btn" data-chapter="3">Глава 3</button>
-                <button class="chapter-btn" data-chapter="4">Глава 4</button>
-                <button class="chapter-btn" data-chapter="5">Глава 5</button>
+                <!-- Buttons generated from JSON -->
             </div>
 
             <div class="chapter-content" id="chapterContent">
@@ -1616,12 +1611,11 @@
     <button class="back-to-top" id="backToTop">↑</button>
 
     <script>
-        // ===== BOOK DATA =====
-        const chapters = [
-            {
-                number: "ПРОЛОГ",
-                title: "Мир, каким его знают",
-                content: `<p>Мир — это лента. Узкая полоса сносной жизни между двумя стенами: стеной огня на востоке и стеной льда на западе. Так учат в школах. Так написано в учебниках. Так было всегда и так будет вечно.</p>
+        // ===== BOOK DATA LOADED FROM book.json =====
+        // Chapters now load dynamically
+
+        // ===== OLD INLINE DATA REMOVED =====
+        const OLD_REMOVED = `<p>Мир — это лента. Узкая полоса сносной жизни между двумя стенами: стеной огня на востоке и стеной льда на западе. Так учат в школах. Так написано в учебниках. Так было всегда и так будет вечно.</p>
                 <p>Города тянутся вдоль этой ленты — бесконечной цепью огней в вечных сумерках. Здесь никогда не бывает полного дня и полной ночи. Здесь небо всегда одного цвета — цвета старого серебра, тронутого ржавчиной на востоке и синевой на западе.</p>
                 <p><em>Полоса.</em> Терминатор. Граница. Единственное место, где можно жить.</p>
                 <p>К востоку — <strong>Пекло</strong>. Туда уходят те, кто хочет разбогатеть или должен искупить вину. Там добывают редкие металлы из расплавленных пород. Там живут огненные коты — жилистые, облезлые, с обугленными ушами и глазами цвета раскалённой меди. Они возвращаются богатыми или не возвращаются вовсе.</p>
@@ -1785,11 +1779,7 @@
                 <p>А дракон по имени Золотой будет медленно умирать в клетке из металла, глядя на своё солнце сквозь решётку.</p>
                 <p><em>Если только кто-нибудь не остановит их.</em></p>
                 <p><em>Если только три души — разделённые звёздами и воплощениями — не найдут способ снова стать одним целым.</em></p>
-                <p><em>Продолжение следует…</em></p>`
-            }
-        ];
-
-        let currentChapter = 0;
+                <p><em>Продолжение следует…</em></p>`;
 
         // ===== LOADER =====
         window.addEventListener('load', () => {
@@ -1997,7 +1987,32 @@
         const prevBtn = document.getElementById('prevChapter');
         const nextBtn = document.getElementById('nextChapter');
 
-        function loadChapter(index) {
+        let chapters = [];
+        let currentChapter = 0;
+
+        // Load chapters from JSON
+        async function loadBookData() {
+            try {
+                const response = await fetch('book.json');
+                const data = await response.json();
+                chapters = data.chapters;
+
+                // Generate chapter buttons
+                chapterNav.innerHTML = chapters.map((ch, i) =>
+                    `<button class="chapter-btn ${i === 0 ? 'active' : ''}" data-chapter="${i}">${ch.number}</button>`
+                ).join('');
+
+                // Load first chapter
+                displayChapter(0);
+            } catch (e) {
+                console.error('Failed to load book.json:', e);
+                chapterText.innerHTML = '<p>Ошибка загрузки глав. Обновите страницу.</p>';
+            }
+        }
+
+        function displayChapter(index) {
+            if (!chapters[index]) return;
+
             const chapter = chapters[index];
             chapterContent.querySelector('.chapter-number').textContent = chapter.number;
             chapterContent.querySelector('.chapter-title').textContent = chapter.title;
@@ -2012,31 +2027,32 @@
             nextBtn.disabled = index === chapters.length - 1;
 
             currentChapter = index;
-
-            // Scroll to reader
-            chapterContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         chapterNav.addEventListener('click', (e) => {
             if (e.target.classList.contains('chapter-btn')) {
-                loadChapter(parseInt(e.target.dataset.chapter));
+                const idx = parseInt(e.target.dataset.chapter);
+                displayChapter(idx);
+                chapterContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
 
         prevBtn.addEventListener('click', () => {
             if (currentChapter > 0) {
-                loadChapter(currentChapter - 1);
+                displayChapter(currentChapter - 1);
+                chapterContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
 
         nextBtn.addEventListener('click', () => {
             if (currentChapter < chapters.length - 1) {
-                loadChapter(currentChapter + 1);
+                displayChapter(currentChapter + 1);
+                chapterContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
 
         // Initial load
-        loadChapter(0);
+        loadBookData();
 
         // ===== SMOOTH SCROLL FOR NAV LINKS =====
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
