@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <url>
+    <loc>https://jetmil.github.io/planet-murr/</loc>
+    <lastmod>2026-01-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://jetmil.github.io/planet-murr/images/cover.png</image:loc>
+      <image:title>Планета Мурр - Обложка книги</image:title>
+      <image:caption>Космическая сага о котах, драконах и судьбе между звёздами</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://jetmil.github.io/planet-murr/#world</loc>
+    <lastmod>2026-01-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://jetmil.github.io/planet-murr/#characters</loc>
+    <lastmod>2026-01-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://jetmil.github.io/planet-murr/images/char_murka.png</image:loc>
+      <image:title>Мурка - главная героиня</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://jetmil.github.io/planet-murr/images/char_ryzhik.png</image:loc>
+      <image:title>Рыжик - световой кот проводник</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://jetmil.github.io/planet-murr/images/char_zolotoy.png</image:loc>
+      <image:title>Золотой - дракон на солнце</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://jetmil.github.io/planet-murr/images/char_baton.png</image:loc>
+      <image:title>Батон - криминальный авторитет</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://jetmil.github.io/planet-murr/images/char_golysh.png</image:loc>
+      <image:title>Отец Голыш - верховный жрец сфинксов</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://jetmil.github.io/planet-murr/images/char_birds.png</image:loc>
+      <image:title>Империя Клюва - враги</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://jetmil.github.io/planet-murr/#society</loc>
+    <lastmod>2026-01-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://jetmil.github.io/planet-murr/#conflict</loc>
+    <lastmod>2026-01-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://jetmil.github.io/planet-murr/#read</loc>
+    <lastmod>2026-01-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://jetmil.github.io/planet-murr/images/ch00_prologue.png</image:loc>
+      <image:title>Пролог - Мир каким его знают</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://jetmil.github.io/planet-murr/images/ch11_battle.png</image:loc>
+      <image:title>Битва за солнце</image:title>
+    </image:image>
+  </url>
+
+</urlset>

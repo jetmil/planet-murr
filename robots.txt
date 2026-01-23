@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jetmil.github.io/planet-murr/sitemap.xml
+
+# Planet Murr - Cosmic Cat Opera
+# https://jetmil.github.io/planet-murr/
