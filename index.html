@@ -2246,22 +2246,30 @@
         ];
 
         function displayChapter(index) {
-            if (!chapters[index]) return;
+            console.log('displayChapter called with index:', index);
+            if (!chapters[index]) {
+                console.error('Chapter not found at index:', index);
+                return;
+            }
 
             const chapter = chapters[index];
             chapterContent.querySelector('.chapter-number').textContent = chapter.number;
             chapterContent.querySelector('.chapter-title').textContent = chapter.title;
             chapterText.innerHTML = chapter.content;
 
-            // Update chapter image
+            // Update chapter image - force reload
             const chapterImg = document.getElementById('chapterImg');
-            if (chapterImg && chapterImages[index]) {
-                const newSrc = './images/' + chapterImages[index] + '.png?v=' + Date.now();
-                console.log('Setting image for chapter', index, ':', newSrc);
-                chapterImg.src = newSrc;
-                chapterImg.alt = chapter.title;
+            const imageName = chapterImages[index];
+            console.log('Image element found:', !!chapterImg, 'Image name:', imageName);
+
+            if (chapterImg && imageName) {
+                const newSrc = './images/' + imageName + '.png?t=' + Date.now();
+                console.log('Setting new src:', newSrc);
+                chapterImg.setAttribute('src', newSrc);
+                chapterImg.setAttribute('alt', chapter.title);
+                console.log('Image src after set:', chapterImg.src);
             } else {
-                console.warn('Cannot set image - img:', !!chapterImg, 'imgData:', chapterImages[index]);
+                console.error('Cannot set image! Element:', chapterImg, 'Name:', imageName);
             }
 
             // Update buttons
